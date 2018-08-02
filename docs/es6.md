@@ -47,7 +47,7 @@ list=[1,2,3]
 
 ### Symbol
 
-ES6 新引入的原始数据类型，每一个 symbol 是独一无二，互不相等，从而保证 变量互不冲突。
+ES6 新引入的原始数据类型，每一个 symbol 是独一无二，互不相等，从而保证变量互不冲突。
 `Symbol.for`接受一个字符串作为参数，然后搜索有没有以该参数作为名称的 Symbol 值。如果有，就返回这个 Symbol 值，否则就新建并返回一个以该字符串为名称的 Symbol 值。
 
 ```javascript
@@ -214,3 +214,43 @@ async function logInOrder(urls) {
   }
 }
 ```
+
+### class
+
+默认采用严格模式。类的`this`默认指向类的实例。
+
+#### 继承
+
+子类的构造函数中，只有调用 super 之后，才可以使用 this 关键字，否则会报错。这是因为子类实例的构建，基于父类实例，只有 super 方法才能调用父类实例。
+
+在子类普通方法中通过 super 调用父类的方法时，方法内部的 this 指向当前的子类实例。
+
+**静态方法**：在一个方法前，加上`static`关键字，就表示该方法不会被实例继承，而是直接通过类来调用。静态方法中的`this`指向类，而非实例。
+
+**与 es5 不同点**：
+
+- class 不存在变量提升。
+- ES5 的继承，实质是先创造子类的实例对象 this，然后再将父类的方法添加到 this 上面（Parent.apply(this)）。ES6 的继承机制完全不同，实质是先将父类实例对象的属性和方法，加到 this 上面（所以必须先调用 super 方法），然后再用子类的构造函数修改 this。
+
+#### 私有方法
+
+没有提供，只能模拟实现
+
+1.  命名区别
+2.  Symbol 方法
+    第三方无法获得 symbol 值,从而实现私有方法和私有属性
+    ```javascript
+    const bar = Symbol('bar')
+    const snaf = Symbol('snaf')
+    export default class myClass {
+      // 公有方法
+      foo(x) {
+        this[bar](x)
+      }
+      // 私有方法
+      [bar](x) {
+        return (this[snaf] = x)
+      }
+      // ...
+    }
+    ```
