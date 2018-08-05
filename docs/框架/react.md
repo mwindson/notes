@@ -108,4 +108,15 @@ const { Provider, Consumer } = React.createContext(defaultValue)
 ### PureComponent 和 shouldComponentUpdate
 
 `shouldComponentUpdate`会将当前传入的 props 和 state 与之前的进行**浅比较**，如果使用`PureComponent`在返回 false 的情况下，组件不会进行 render。
-为了避免深比较的性能问题和浅比较的局限性，使用 Immutable 可以优化 PureComponent  渲染。
+为了避免深比较的性能问题和浅比较的局限性，使用 Immutable 可以优化 PureComponent 渲染。
+
+### 动态子组件设置 key
+
+当同一层子组件发生变化时，diff 算法在设置 key 时能更好地进行对比，减少重渲染。
+
+## 一些问题
+
+### 在 setState 更新完成后执行一个事件
+
+1.  在 didUpdate()生命周期时执行
+2.  在`setState()`的第二个参数传入事件函数，可以在更新完成后执行。

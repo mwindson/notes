@@ -1,3 +1,68 @@
-## React-Router
-### 原理
-### 动态加载
+# React-Router
+
+## SPA 路由
+
+SPA 弊端：
+
+1.  用户在使用的过程中，url 不会发生任何改变。当用户操作了几步之后，一不小心刷新了页面，又会回到最开始的状态。
+2.  由于缺乏 url，不方便搜索引擎进行收录。
+
+## hash 路由
+
+- hash 原来用于文档的导航，具有**改变 url 同时，不刷新页面**的特性。
+- hash 路由通过操作`window.location`的字符串来更改 hash，通过`window.addEventListener('hashchange', callback)`来监听 URL 的变化。
+- 基于 hash 路由的 url 存在一个#号，不美观。
+
+```javascript
+// 基于hash路由的实现
+class Router {
+  constructor() {
+    this.routes = {}
+    this.currentUrl = ''
+  }
+  route(path, callback) {
+    this.routes[path] = callback || function() {}
+  }
+  updateView() {
+    this.currentUrl = location.hash.slice(1) || '/'
+    this.routes[this.currentUrl] && this.routes[this.currentUrl]()
+  }
+  init() {
+    window.addEventListener('load', this.updateView.bind(this), false)
+    window.addEventListener('hashchange', this.updateView.bind(this), false)
+  }
+}
+const router = new Router()
+router.init()
+router.route('/', function() {
+  document.getElementById('content').innerHTML = 'Home'
+})
+router.route('/about', function() {
+  document.getElementById('content').innerHTML = 'About'
+})
+router.route('/topics', function() {
+  document.getElementById('content').innerHTML = 'Topics'
+})
+```
+
+## history 路由
+
+- 基于 history 的路由，它通过`history.pushState`来修改 URL，通过`window.addEventListener('popstate', callback)`来监听前进/后退事件。
+- 早期 history：`go`，`forward`，`back`，只能用于多页面跳转。
+  HTML5 新增`pushState()`和`replaceState()`来实现改变 url 且不刷新页面。
+- history 改变无法触发事件，因此需要监听前进或后退按钮的点击或者 a 标签、js 修改路由三个途径。HTML5 规范中新增了一个 onpopstate 事件，通过它便可以监听到前进或者后退按钮的点击。
+
+![history路由](https://user-images.githubusercontent.com/8401872/29739490-c1dbb054-8a71-11e7-9c9f-31cbbd6adbcb.png)
+
+## React-Router 原理
+
+React-Router 基于 history 库实现，实现了 URL 与渲染组件的同步。
+history 库：
+
+- 老浏览器的 history: 主要通过 hash 来实现，对应 createHashHistory
+- 高版本浏览器: 通过 html5 里面的 history，对应 createBrowserHistory
+- node 环境下: 主要存储在 memeory 里面，对应 createMemoryHistory
+
+http://zhenhua-lee.github.io/react/history.html
+state 存储在 sessionStorage 中
+![img](http://zhenhua-lee.github.io/img/react-router/internal.png)
