@@ -4,6 +4,37 @@
 
 `window.onffline`当离线时触发；`window.ononline`当返回在线状态时触发。
 
+## 语义化
+
+语义化的含义就是用正确的标签做正确的事情，html 语义化就是让页面的内容结构化，便于对浏览器、搜索引擎解析；在没有样式 CCS 情况下也以一种文档格式显示，并且是容易阅读的。搜索引擎的爬虫依赖于标记来确定上下文和各个关键字的权重，利于 SEO。使阅读源代码的人对网站更容易将网站分块，便于阅读维护理解。
+
+## 解析模式
+
+在文件第一行，html 根元素之前，添加一个 doctype 来声明文档类型。
+
+```html
+<!DOCTYPE html>
+```
+
+1.  标准模式：遵循浏览器支持的最新 css 解析标准；
+2.  怪异模式：尝试兼容更旧的浏览器
+3.  近似标准模式：过渡模式，让浏览器尝试以新标准方式来处理对旧标准实现的代码；
+
+HTML5 提供的<!DOCTYPE html>是标准模式，向后兼容的, 等同于开启了标准模式。
+
+## HTML5
+
+1.  新增标签
+2.  新 API
+    - HTML Geolocation
+    - HTML Drag and Drop
+    - HTML Local Storage
+    - HTML Application Cache
+    - HTML Web Workers
+    - HTML SSE
+    - HTML Canvas/WebGL
+    - HTML Audio/Video
+
 ## 标签
 
 `<pre>`标签会预定义格式化的文本，但会保留空格和换行符。`<code>`标签表示计算机源码

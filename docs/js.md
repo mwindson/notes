@@ -1,4 +1,4 @@
-## javascript
+# javascript
 
 ```javascript
 const a = 'test'
@@ -8,11 +8,11 @@ a.len // undefined
 
 `string.replace()`默认替换第一个字符，全部替换要用正则`/***/g`
 
-### **== 类型转换**
+## **== 类型转换**
 
-### 变量
+## 变量
 
-**变量提升**：变量或函数的声明会被提升到顶部。
+**变量提升**：使用`var`变量声明或函数声明会被提升到作用域的顶部。使用`let`或`const`的声明不会发生`变量提升`。
 
 **执行上下文**：
 
@@ -36,7 +36,7 @@ a.len // undefined
 4.  如果父级中没找到，继续往上找
 5.  直到全局上下文中也没找到就报错
 
-### this
+## this
 
 **this 是执行上下文环境的一个属性，而不是某个变量对象的属性**。
 
@@ -67,7 +67,7 @@ bar = {
 bar.foo() //200
 ```
 
-### 对象
+## 对象
 
 **原型**：`xxx.__proto__`指向对象的原型
 **原型链**：查询属性 x：对象 o ->对象 o 的原型 -> 对象 o 原型的原型 -> .. 直到找到 x 或找到 Object.prototype(`Object.prototype.__proto__ 为null`)为止
@@ -99,7 +99,7 @@ bar.foo() //200
 
 es5 中新增`Object.keys()`（只有可枚举的属性）和`Object.getOwnPropertyNames()`（包括不可枚举的属性）方法
 
-### 函数
+## 函数
 
 - 作为函数调用
 
@@ -166,7 +166,7 @@ function func() {
 
 es5 和 es6 继承的区别
 
-### 垃圾回收
+## 垃圾回收
 
 js 会自动进行垃圾回收机制。
 
@@ -182,7 +182,7 @@ Javascript 引擎基础 GC 方案是标记清除，遍历所有可访问的对�
 
 1.  部分闭包造成的循环引用。
 
-### Event Loop
+## Event Loop
 
 事件循环是 js 代码执行的逻辑。
 
@@ -204,37 +204,66 @@ Javascript 引擎基础 GC 方案是标记清除，遍历所有可访问的对�
 
 **在 node 环境下，process.nextTick 的优先级高于 Promise**
 
-### 其他
+## 其他
 
 `for...in...`转换为可枚举的对象后，根据对象的属性（字符串）来进行遍历
 
 `for...of...`
 
-### 严格模式
+## 严格模式
 
-### window 对象
+## window 对象
 
 Element 对象有 style 和 className 属性，允许修改 css 样式和类名。
 
-##### onload 事件
+### onload 事件
 
 当文档内容稳定并可以操作时会触发。
 
-##### html 中 javascript 程序执行过程
+## html 中 javascript 程序执行过程
 
 1.  载入文档内容，并执行`<script>`元素里的代码，按照出现和从上往下的顺序执行。
 2.  文档载入完并且脚本执行完后，进入事件驱动阶段：触发 load 事件，并调用事件处理程序函数（鼠标和键盘等事件）。
 
 javascript 脚本的加载默认是同步和阻塞的。`defer`属性会延迟脚本的执行直到文档的载入和解析完成。`async`属性会让浏览器尽可能快执行脚本，两者皆有时会遵从`async`属性。
 
-### 模块标准
+## 模块化
 
-#### commonjs
+### commonjs
+
+服务器端模块的规范。`require`是同步的，但浏览器天生异步，无法正常加载模块。因为同步的加载模块会对性能，可用性，debug 调试，跨域访问产生问题。
 
 ```javascript
 let { stat, exists, readFile } = require('fs')
 ```
 
-#### AMD
+### AMD
 
-#### CMD
+AMD 是`Asynchronous Module Definition`的缩写，例如`requirejs`。
+采用异步方式加载模块，模块的加载不影响它后面语句的运行。所有依赖这个模块的语句，都定义在一个回调函数中，等到加载完成之后，这个回调函数才会运行。
+`requireJS`使用之前必须配置，同时该配置很难重用。
+
+### UMD
+
+UMD 是 commonjs 和 AMD 的混合。UMD 的实现很简单：
+
+1.  先判断是否支持 Node.js 模块格式（exports 是否存在），存在则使用 Node.js 模块格式。
+2.  再判断是否支持 AMD（define 是否存在），存在则使用 AMD 方式加载模块。
+3.  前两个都不存在，则将模块公开到全局（window 或 global）
+
+### CMD
+
+`CMD`即`Common Module Definition`通用模块定义。`CMD`和`AMD`在模块定义方式和模块加载（可以说运行、解析）时机上有所不同。
+
+```javascript
+define(function(require, exports, module) {
+  // 模块代码
+})
+```
+
+`AMD`是依赖关系前置,在定义模块的时候就要声明其依赖的模块;
+`CMD`是按需加载依赖就近,只有在用到某个模块的时候再去 require;
+
+### es6 module
+
+ES6 模块的设计思想是尽量的静态化，使得编译时就能确定模块的依赖关系，以及输入和输出的变量。CommonJS 和 AMD 模块，都只能在运行时确定这些东西。
