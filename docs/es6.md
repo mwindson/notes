@@ -231,6 +231,22 @@ async function logInOrder(urls) {
 
 - class 不存在变量提升。
 - ES5 的继承，实质是先创造子类的实例对象 this，然后再将父类的方法添加到 this 上面（Parent.apply(this)）。ES6 的继承机制完全不同，实质是先将父类实例对象的属性和方法，加到 this 上面（所以必须先调用 super 方法），然后再用子类的构造函数修改 this。
+- ES6 的子类和父类，子类原型和父类原型，通过**proto** 连接。
+
+**es6 的继承用 es5 实现**
+
+```javascript
+function Parent() {}
+function Child() {}
+// es6
+Object.setPrototypeOf(Child.prototype, Parent.prototype)
+//es5
+Child.prototype.__proto__ = Parent.prototype
+//es6
+Object.setPrototypeOf(Child, Parent)
+//es5
+Child.__proto__ = Parent
+```
 
 #### 私有方法
 

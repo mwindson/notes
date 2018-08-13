@@ -267,3 +267,39 @@ define(function(require, exports, module) {
 ### es6 module
 
 ES6 模块的设计思想是尽量的静态化，使得编译时就能确定模块的依赖关系，以及输入和输出的变量。CommonJS 和 AMD 模块，都只能在运行时确定这些东西。
+
+## 例题
+
+- resize 和 scroll 事件的性能优化
+
+  resize: debounce
+
+  ```javascript
+  var debounce = function(idle, action) {
+    var last
+    return function() {
+      var ctx = this,
+        args = arguments
+      clearTimeout(last) // 将上一次的定时事件取消
+      last = setTimeout(function() {
+        action.apply(ctx, args)
+      }, idle)
+    }
+  }
+  ```
+
+  ​
+  scroll：throttle
+
+  ```javascript
+  var throttle = function(delay, action) {
+    var last = 0
+    return function() {
+      var curr = +new Date() // performance.now()更好
+      if (curr - last > delay) {
+        action.apply(this, arguments)
+        last = curr
+      }
+    }
+  }
+  ```

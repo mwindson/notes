@@ -54,6 +54,13 @@ HTML5 提供的<!DOCTYPE html>是标准模式，向后兼容的, 等同于开启
 ```javascript
 localStorage.setItem('x', 1)
 localStorage.getItem('x')
+localStorage.removeItem('x')
+// 遍历
+for (let i = localStorage.length - 1; i >= 0; i--) {
+  console.log(
+    '第' + (i + 1) + '条数据的键值为：' + localStorage.key(i) + '，数据为：' + localStorage.getItem(localStorage.key(i))
+  )
+}
 ```
 
 **存储事件**

@@ -50,7 +50,7 @@ router.route('/topics', function() {
 - 基于 history 的路由，它通过`history.pushState`来修改 URL，通过`window.addEventListener('popstate', callback)`来监听前进/后退事件。
 - 早期 history：`go`，`forward`，`back`，只能用于多页面跳转。
   HTML5 新增`pushState()`和`replaceState()`来实现改变 url 且不刷新页面。
-- history 改变无法触发事件，因此需要监听前进或后退按钮的点击或者 a 标签、js 修改路由三个途径。HTML5 规范中新增了一个 onpopstate 事件，通过它便可以监听到前进或者后退按钮的点击。
+- history 改变无法触发事件，因此需要**监听前进或后退按钮的点击或者 a 标签、js 修改路由**三个途径。HTML5 规范中新增了一个 onpopstate 事件，通过它便可以监听到前进或者后退按钮的点击。
 
 ![history路由](https://user-images.githubusercontent.com/8401872/29739490-c1dbb054-8a71-11e7-9c9f-31cbbd6adbcb.png)
 

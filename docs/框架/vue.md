@@ -14,5 +14,6 @@ Vue的响应式实现分为：
 **Observer**
 Vue 中的数据对象都会在初始化过程中转化为 Observer 对象。
 **Watcher**
+每个组件实例都有相应的`watcher`实例对象，`watcher`负责重新计算对应数据，并更新关联的组件。
 **Dep**
 Dep 类是 Watcher 和 Observer 之间的纽带。每一个 Observer 都有一个 Dep 实例，用来存储订阅者 Watcher。

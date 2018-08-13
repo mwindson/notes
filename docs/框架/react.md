@@ -20,6 +20,46 @@
 
 ## 生命周期
 
+- 首次挂载：
+  `getDefaultProps`->`getInitialState`->`componentWillMount`->`render`->`componentDidMount`
+- 卸载组件：
+  `componentWillUnmount`
+- 重新挂载：
+  `getInitialState`->`componentWillMount`->`render`->`componentDidMount`
+- 再次渲染，组件更新：
+  `componentWillReceiveProps`->`shouldComponentUpdate`->`componentWillUpdate`->`render`->`componentDidUpate`
+- state 改变：
+  `shouldComponentUpdate`->`componentWillUpdate`->`render`->`componentDidUpdate`
+- setState 的时机
+  `componentWillMount`、`componentDidMount`、`componentWillReceiveProps`、`componentDidUpdate`
+
+## setState 更新
+
+`setState`通过状态队列机制来更新`state`。
+
+## diff 算法
+
+策略：
+
+1.  Web UI 中 DOM 节点跨层级的移动比较少。
+2.  拥有相同类的两个组件会生成相似的树形结构，拥有不同类的两个组件将会生成不同的树形结构。
+3.  对于同一层级的一组子节点，通过唯一的 id 进行区分。
+
+算法：
+
+1.  tree diff：基于策略一，两个树只会对同一层次的节点进行比较。建议不要进行 DOM 节点跨层级的操作。
+2.  component diff：基于策略二，如果是同一类型的组件，那么继续比较；如果不是将组件判断为 dirty component，并替换整个组件下所有节点。同一类型组件比较会浪费大量 diff 时间，可以用`shouldComponentUpdate()`自主判断进行 diff 算法，节省时间。
+3.  element diff：对节点进行插入、移动和删除三类操作。基于策略三，对同一层级的同组子节点，添加唯一 key 进行区分，提升性能。应该减少将最后一个节点提升到列表首部的操作。
+
+## 组件通信
+
+1.  父子组件通信
+    父组件通过 props 向子组件传递数据；子组件通过调用父组件传递的函数向父组件传递数据。
+2.  跨组件通信
+    - 通过`EventEmitter`事件来实现，在`componentDidMount`添加监听，在`componentWillUnmount`移除监听。
+    - 层层传递 props 和回调函数
+    - 利用`context`API 来传递数据
+
 ## React 16.3 变化
 
 ### 生命周期
@@ -27,7 +67,6 @@
 #### static getDerivedStateFromProps(nextProps,prevState)
 
 1.  替换了 WiiMount 和 WillReceiveProps
-
 2.  触发时期
 
     - 组件 Mount 前
@@ -35,17 +74,14 @@
     - 父组件导致本组件重渲染时触发，此时无论传入 props 是否改变都会触发，需要比较
 
 3.  注意点
-
     - 返回一个 Object 用于更新 state 或者 返回 null 用于不更新对象
-
       无需再手动 setState
-
     - Mount 前的 nextProps 值为初次传入的 props，prevState 的值为 constructor 中的 this.state 值
 
 #### componentWillUpdate => getSnapshotBeforeUpdate(prevProps,prevState)
 
 1.  替换了 WillUpdate
-2.  返回值会传递给`componentDidUpdate(prevProps.prevState,snapshot)` 的第三个参数`snapshot`
+2.  返回值会传递给`componentDidUpdate(prevProps,prevState,snapshot)` 的第三个参数`snapshot`
 
 ### 新的 Refs
 
@@ -56,8 +92,8 @@ this.myRef = React.createRef()
 const node = this.myRef.current
 ```
 
-- ref 在 html 元素上=> current： Dom 元素
-- ref 在组件上=> current：组件的实例
+- ref 在 html 元素上 => current： Dom 元素
+- ref 在组件上 => current：组件的实例
 - ref 不能在函数组件上 => 因为无实例
 
 ### context API
@@ -99,16 +135,18 @@ const { Provider, Consumer } = React.createContext(defaultValue)
 
 通过 refs 来访问底层 dom 元素，从而来操控数据。
 
-## 跨组件通信
-
-通过`EventEmitter`事件来实现，在`componentDidMount`添加监听，在`componentWillUnmount`移除监听。
-
 ## 性能优化
 
 ### PureComponent 和 shouldComponentUpdate
 
-`shouldComponentUpdate`会将当前传入的 props 和 state 与之前的进行**浅比较**，如果使用`PureComponent`在返回 false 的情况下，组件不会进行 render。
-为了避免深比较的性能问题和浅比较的局限性，使用 Immutable 可以优化 PureComponent 渲染。
+`shouldComponentUpdate`会将当前传入的 props 和 state 与之前的进行**浅比较**。
+`PureComponent`实现`ShouldComponent`的默认方法不同。`PureComponent`默认情况下会对前后的 props 和 state 进行浅比较，`Component`会默认返回 true。
+
+### Immutable
+ 
+为了避免深比较的性能问题和浅比较的局限性，使用 Immutable 可以优化性能。
+`Immutable`可以通过`is`快捷准确进行比较。
+另外，为了避免原地修改产生的问题，需要`Immutable`不可变的对象。
 
 ### 动态子组件设置 key
 
@@ -118,5 +156,5 @@ const { Provider, Consumer } = React.createContext(defaultValue)
 
 ### 在 setState 更新完成后执行一个事件
 
-1.  在 didUpdate()生命周期时执行
+1.  在`didUpdate()`生命周期时执行
 2.  在`setState()`的第二个参数传入事件函数，可以在更新完成后执行。
