@@ -3,10 +3,14 @@
 ## 特点
 
 1.  专注视图层
-    React 提供了 View 层的解决方案。
+    React 提供了 View 层的解决方案，数据决定视图，函数式思想
 2.  Virtual DOM
     React 将真实 DOM 树转换为 JS 对象树，保存在内存中，state 发生变化时，根据 state 生成新的 virtualDOM，并且通过 diff 算法进行比对，只更新被改变的内容。这样避免了 js 引擎频繁调用渲染引擎渲染 DOM，优化了性能。
-    另外，有了 virtalDOM,可以容易地进行跨平台开发，如 ReactNative。
+3.  另外，有了 virtalDOM,可以容易地进行跨平台开发，如 ReactNative。
+4.  组件化开发的思路，使组件可复用、可组合、可测试、可维护
+5.  生态环境好
+6.  提倡 Immutable，避免过度重新渲染
+7.  单向数据流，更容易对数据进行控制，找到数据源头
 
 ## 事件系统
 
@@ -143,7 +147,7 @@ const { Provider, Consumer } = React.createContext(defaultValue)
 `PureComponent`实现`ShouldComponent`的默认方法不同。`PureComponent`默认情况下会对前后的 props 和 state 进行浅比较，`Component`会默认返回 true。
 
 ### Immutable
- 
+
 为了避免深比较的性能问题和浅比较的局限性，使用 Immutable 可以优化性能。
 `Immutable`可以通过`is`快捷准确进行比较。
 另外，为了避免原地修改产生的问题，需要`Immutable`不可变的对象。
@@ -158,3 +162,7 @@ const { Provider, Consumer } = React.createContext(defaultValue)
 
 1.  在`didUpdate()`生命周期时执行
 2.  在`setState()`的第二个参数传入事件函数，可以在更新完成后执行。
+
+### React 安全
+
+React 会对字符进行转译替换成字符串，从而保证了安全性

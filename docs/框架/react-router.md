@@ -64,5 +64,8 @@ history 库：
 - node 环境下: 主要存储在 memeory 里面，对应 createMemoryHistory
 
 http://zhenhua-lee.github.io/react/history.html
+
 state 存储在 sessionStorage 中
+
 ![img](http://zhenhua-lee.github.io/img/react-router/internal.png)
+![img](http://zhenhua-lee.github.io/img/react-router/upper.png)

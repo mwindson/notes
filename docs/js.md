@@ -1,5 +1,23 @@
 # javascript
 
+###引擎运行
+
+**核心的 JIT 编译器将源码编译成机器码运行**。
+
+词法分析-> 语法分析-> 字节码->机器码
+
+字节码只在运行时编译，用到哪一行就编译哪一行，并且缓存(inline cache)
+
+## 数据类型
+
+**原始类型**：number、string、boolean、null、undefined、symbol(ES6 新增)
+
+**对象类型**：object(array，function)
+
+原始类型不可变，对象类型可变。
+
+对象类型具有属性；在使用 string、number、boolean 原始类型方法时，js 会在调用 new String()等方式将 string、number、boolean 转成对应的对象，从而进行属性的引用。但如果给 string 类型添加属性，js 会忽略并返回 undefined。
+
 ```javascript
 const a = 'test'
 a.len = 4

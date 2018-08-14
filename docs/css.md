@@ -24,7 +24,23 @@
 
 ## 样式计算权重
 
-id 选择器 > 类，属性选择器和伪类选择器 > 元素和伪元素
+!important > 行内样式 > id > class > tag
+
+## 伪类
+
+- 状态 :link,:visited 等
+- 结构化:not, :first-child, :nth-last-child
+- 表单相关 :checked, :default,:disabled
+- ...
+
+## 伪元素
+
+::after , ::before , ::selection, :: first-line
+
+## CSS 有哪些样式可以给子元素继承
+
+- 可继承的:`font-size`,`font-weight`,`line-height`,`color`,`cursor`等
+- 不可继承的一般是会改变盒子计算的:`display`,`margin`、`border`、`padding`、`height`等
 
 ## css 解析顺序
 
@@ -45,7 +61,13 @@ CSS 匹配不是从左到右进行查找，而是从右到左进行查找。如�
 
 1.  BFC
 2.  IFC
+    行内元素自身如何显示以及在框内如何摆放 。
+    1.  如果几个行内框在水平方向无法放入一个行框内，它们可以分配在两个或多个垂直堆叠的行框中（即行内框的分割）
+    2.  行框在堆叠时没有垂直方向上的分割且永不重叠
+    3.  行框的高度总是足够容纳所包含的所有框。不过，它可能高于它包含的最高的框（例如，框对齐会引起基线对齐）
+    4.  行框的左边接触到其包含块的左边，右边接触到其包含块的右边。
 3.  FFC
+    即`display:flex`，弹性布局
 4.  table
 5.  grid
 
@@ -219,11 +241,11 @@ CSS 匹配不是从左到右进行查找，而是从右到左进行查找。如�
 ## BFC
 
 内部的 Box 会在垂直方向，一个接一个地放置。
-Box 垂直方向的距离由 margin 决定。属于同一个 BFC 的两个相邻 Box 的 margin 会发生重叠
+Box 垂直方向的距离由 margin 决定。属于同一个 BFC 的两个相邻 Box 的 margin 会发生重叠。
 每个元素的 margin box 的左边， 与包含块 border box 的左边相接触(对于从左往右的格式化，否则相反)。即使存在浮动也是如此。
 BFC 的区域不会与 float box 重叠。
 BFC 就是页面上的一个隔离的独立容器，容器里面的子元素不会影响到外面的元素。反之也如此。
-计算 BFC 的高度时，浮动元素也参与计算
+计算 BFC 的高度时，浮动元素也参与计算。
 
 **触发 BFC**
 
@@ -371,4 +393,19 @@ BFC 就是页面上的一个隔离的独立容器，容器里面的子元素不�
 
 #center {
 }
+```
+
+### zoom 和 scale 的区别
+
+1. zoom 的缩放是相对于左上角的；而 scale 默认是居中缩放；
+2. zoom 的缩放改变了元素占据的空间大小；而 scale 的缩放占据的原始尺寸不变，页面布局不会发生变化；
+3. zoom 会真实改变元素大小，会引起回流
+
+### CSS 中 transition 和 animate 有何区别? animate 如何停留在最后一帧
+
+​ `transition`一般用来做过渡的,而`animate`则是做动效,算是前者的一个补充拓展；过渡的开销比动效小，
+如何让`animate`停留在最后一帧也好办,就它自身参数的一个值就可以了
+
+```css
+animation-fill-mode: forwards;  <!--backwards则停留在首帧,both是轮流-->
 ```
