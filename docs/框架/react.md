@@ -15,11 +15,17 @@
 ## 事件系统
 
 1.  事件委派
+
     React 会把所有事件绑定在结构最外层，组件挂载或卸载时，会在事件监听器上插入或删除一些对象。
+
     事件发生时，会首先被统一的事件监听器处理，然后找到对应的事件处理函数调用，通过**事件冒泡**进行委派。
+
 2.  自动绑定
+
     方法会绑定在组件上。
+
 3.  原生事件
+
     通过`refs`来调用原生事件（在组件卸载时，需要手动溢出，否则会内存泄漏）。
 
 ## 生命周期
@@ -39,7 +45,7 @@
 
 ## setState 更新
 
-`setState`通过状态队列机制来更新`state`。
+`setState`通过状态队列机制来更新`state`。`setState`第二个参数是回调函数，会在 state 更新后被调用。
 
 ## diff 算法
 
@@ -126,8 +132,6 @@ const { Provider, Consumer } = React.createContext(defaultValue)
 
 - 所有 consumers 会在 Provider 值变化时重渲染(Object.is()来比较新旧值)
 - Provider 的 value 不能直接传入{...}而应该提升为 state
-
-## diff 经验与应对方法
 
 ## 受控组件与非受控组件
 
