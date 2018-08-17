@@ -227,6 +227,18 @@ async function logInOrder(urls) {
 
 **静态方法**：在一个方法前，加上`static`关键字，就表示该方法不会被实例继承，而是直接通过类来调用。静态方法中的`this`指向类，而非实例。
 
+- 方法不能给 this 引用,可以给类直接引用
+- 静态不可以给实例调用,比如 `let a = new ParentClass => a.sayHello()` 会抛出异常
+- 父类静态方法,子类非`static`方法没法覆盖父类
+- 静态方法可以给子类继承
+- 静态属性可以继承也可以被修改
+
+**私有变量**
+
+- 人为命名区分
+- 利用闭包
+- weakMap 可以避免内存泄露,当没有被值引用的时候会自动给内存寄存器回收
+
 **与 es5 不同点**：
 
 - class 不存在变量提升。
@@ -238,6 +250,7 @@ async function logInOrder(urls) {
 ```javascript
 function Parent() {}
 function Child() {}
+Child.prototype = Object.create(Parent && Parent.Prototype)
 // es6
 Object.setPrototypeOf(Child.prototype, Parent.prototype)
 //es5

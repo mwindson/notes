@@ -39,7 +39,6 @@
 - 状态 :link,:visited 等
 - 结构化:not, :first-child, :nth-last-child
 - 表单相关 :checked, :default,:disabled
-- ...
 
 ## 伪元素
 
@@ -429,5 +428,32 @@ BFC 就是页面上的一个隔离的独立容器，容器里面的子元素不�
 如何让`animate`停留在最后一帧也好办,就它自身参数的一个值就可以了
 
 ```css
-animation-fill-mode: forwards;  <!--backwards则停留在首帧,both是轮流-->
+animation-fill-mode: forwards;
+<!--backwards则停留在首帧，both是轮流-->
 ```
+
+##### Canvas 优化
+
+- 分层 Canvas
+- 离屏渲染
+- 避免无用的绘制
+- webworker 和拆分任务
+
+##### CSS3 的新特性
+
+- 在布局方面新增了 flex 布局
+- 在选择器方面新增了例如:first-of-type,nth-child 等选择器
+- 在盒模型方面添加了 box-sizing 来改变盒模型
+- 在动画方面增加了 animation、2d 变换、3d 变换等
+- 在颜色方面添加透明、rgba 等
+- 在字体方面 允许嵌入字体和设置字体阴影,
+- 盒子的阴影
+- 关键的媒体查询。
+
+##### CSS 硬件加速
+
+​ 触发硬件加速的 CSS 属性有 transform、opacity、filter，为了避免 2D 动画在 开始和结束的时候的 repaint 操作，一般使用 tranform:translateZ(0)
+
+##### CSS3 动画如何实现暂停？
+
+css3 动画可以通过设置 animation-play-state 属性为 paused 来设置这个动画暂停。

@@ -17,3 +17,21 @@ const res = promiseArray.reduce(
 )
 // 按顺序发出请求和输出
 a.reduce((prev, current) => prev.then(() => toPromise(current)).then(v => console.log(v)), Promise.resolve())
+
+// 取消promise
+const promiseWithCancel = time => {
+  let resolve, reject
+  const innerPromise = new Promise((resolveFromPromise, rejectFromPromise) => {
+    resolve = resolveFromPromise
+    reject = rejectFromPromise
+    setTimeout(() => resolve('resolved ' + time), time)
+  })
+  const cancel = () => {
+    reject({ reason: 'cancelled' })
+  }
+  innerPromise.cancel = cancel
+  return innerPromise
+}
+const promise = promiseWithCancel(2000)
+promise.then(v => console.log(v)).catch(err => console.log(err))
+setTimeout(() => promise.cancel(), 3000)

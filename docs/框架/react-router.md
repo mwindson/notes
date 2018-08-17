@@ -69,3 +69,11 @@ state 存储在 sessionStorage 中
 
 ![img](http://zhenhua-lee.github.io/img/react-router/internal.png)
 ![img](http://zhenhua-lee.github.io/img/react-router/upper.png)
+
+## 动态加载
+
+访问到路由才加载加了
+
+- `getChildRoutes`
+- `getIndexRoute`
+- `getComponents`

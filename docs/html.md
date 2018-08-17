@@ -1,3 +1,27 @@
+<!-- TOC -->
+
+- [HTML](#html)
+  - [语义化](#语义化)
+  - [解析模式](#解析模式)
+  - [HTML5](#html5)
+  - [标签](#标签)
+  - [存储](#存储)
+    - [localStorage 和 sessionStorage](#localstorage-和-sessionstorage)
+    - [cookie](#cookie)
+    - [cookie vs session](#cookie-vs-session)
+    - [HTML5 离线缓存](#html5-离线缓存)
+  - [多媒体](#多媒体)
+    - [图片](#图片)
+    - [音频和视频](#音频和视频)
+  - [回流和重绘](#回流和重绘)
+  - [iframe](#iframe)
+    - [优点](#优点)
+    - [缺点](#缺点)
+    - [使用场景](#使用场景)
+  - [Service Worker](#service-worker)
+
+<!-- /TOC -->
+
 # HTML
 
 **HTML**的**文档源**：由**协议**、**主机名**（域名）和**端口**决定。
@@ -38,6 +62,14 @@ HTML5 提供的<!DOCTYPE html>是标准模式，向后兼容的, 等同于开启
 ## 标签
 
 `<pre>`标签会预定义格式化的文本，但会保留空格和换行符。`<code>`标签表示计算机源码
+
+`<script>`标签打开`defer`或`async`属性，脚本就会异步加载。渲染引擎遇到这一行命令，就会开始下载外部脚本，但不会等它下载和执行，而是直接执行后面的命令。
+
+`defer`与`async`的区别是
+
+- `defer`要等到整个页面在内存中正常渲染结束（DOM 结构完全生成，以及其他脚本执行完成），才会执行。
+- `async`一旦下载完，渲染引擎就会中断渲染，执行这个脚本以后，再继续渲染。一句话，`defer`是“渲染完再执行”，`async`是“下载完就执行”。
+- 如果有多个`defer`脚本，会按照它们在页面出现的顺序加载，而多个`async`脚本是不能保证加载顺序的。
 
 ## 存储
 
@@ -163,17 +195,19 @@ Repaint，即重绘，意味着元素发生的改变只是影响了元素的一�
 
 **什么时候引起回流**
 
-```markdown
-1.页面渲染初始化
-2.DOM 结构改变，比如删除了某个节点
-3.render 树变化，比如减少了 padding，字体改变 4.窗口 resize 5.最复杂的一种：获取某些属性，引发回流，
+1. 页面渲染初始化
+2. DOM 结构改变，比如删除了某个节点,设置元素的**内联样式**或 **css**
+3. render 树变化，比如减少了 padding，字体改变
+4. 窗口 resize
+5. 最复杂的一种：获取某些属性，引发回流如`getComputedStyle()`
+
 很多浏览器会对回流做优化，会等到数量足够时做一次批处理回流，除了 render 树的直接变化，当获取一些属性时，浏览器为了获得正确的值也会触发回流，这样使得浏览器优化无效，包括
-(1) offset(Top/Left/Width/Height)
-(2) scroll(Top/Left/Width/Height)
-(3) cilent(Top/Left/Width/Height)
-(4) width,height
-(5) 调用了 getComputedStyle()或者 IE 的 currentStyle
-```
+
+- offset(Top/Left/Width/Height)
+- scroll(Top/Left/Width/Height)
+- cilent(Top/Left/Width/Height)
+- width,height
+- 调用了 getComputedStyle()或者 IE 的 currentStyle
 
 **优化方案**
 
@@ -181,6 +215,10 @@ Repaint，即重绘，意味着元素发生的改变只是影响了元素的一�
 - 避免循环操作 dom，创建一个 documentFragment 或 div，在它上面应用所有 DOM 操作，最后再把它添加到 window.document
 - 避免多次读取 offset 等属性。无法避免则将它们缓存到变量
 - 将复杂的元素绝对定位或固定定位，使得它脱离文档流，否则回流代价会很高
+- 实现动画时，最好应用在 position 为 fixed 或 absolute 的元素上
+- 避免同时设置多个元素的内联样式（style 属性）
+- 避免使用 table 布局
+- 不要使用 CSS JavaScript 表达式（例如：color: expression((new Date()).getHours()%2 ? “#0091ea” : “#00b8d4” )
 
 ## iframe
 
@@ -205,3 +243,10 @@ Repaint，即重绘，意味着元素发生的改变只是影响了元素的一�
 2.  引用第三方内容
 3.  独立带交互的内容
 4.  保持独立焦点和历史记录的子窗口
+
+## Service Worker
+
+- 它是一种 JavaScript 工作线程，无法直接访问 DOM。 服务工作线程通过响应 postMessage 接口发送的消息来与其控制的页面通信，页面可在必要时对 DOM 执行操作。
+- 服务工作线程是一种可编程网络代理，让您能够控制页面所发送网络请求的处理方式。
+- 它在不用时会被中止，并在下次有需要时重启，因此，您不能依赖于服务工作线程的 onfetch 和 onmessage 处理程序中的全局状态。如果存在您需要持续保存并在重启后加以重用的信息，服务工作线程可以访问 IndexedDB API。
+- 服务工作线程广泛地利用了 promise

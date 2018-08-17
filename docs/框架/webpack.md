@@ -46,8 +46,11 @@ require.ensure(['module-a', 'module-b'], function(require) {
 ## 动态加载原理，如何实现
 
 - webpack4 之前
+
   `require.ensure(dependencies, callback, chunkName)`
+
 - webpack4
+
   利用 import() 做动态加载
 
   ```javascript
@@ -62,9 +65,9 @@ require.ensure(['module-a', 'module-b'], function(require) {
 
 ## 打包优化
 
-1.  `resolve.alias` 重定向到压缩后代码而非引入源码
-2.  `module.noParse` 确定一个模块中没有其它新的依赖使用
-3.  `externals.xxx.true` 使用公用 CDN
+1. `resolve.alias` 重定向到压缩后代码而非引入源码
+2. `module.noParse` 确定一个模块中没有其它新的依赖使用
+3. `externals.xxx.true` 使用公用 CDN
 
 ## webpack 实现 js require css 的原理
 
@@ -99,3 +102,15 @@ module.exports = function(source) {
   minimize.parse(source, callback)
 }
 ```
+
+## Babel
+
+`ES6代码输入 ==》 babylon进行解析 ==》 得到AST ==》 plugin用babel-traverse对AST树进行遍历转译 ==》 得到新的AST树 ==》 用babel-generator通过AST树生成ES5代码`
+
+`babel-preset-env` 允许你指定一个代码执行环境，并且只编译该环境缺少的特性。
+
+`babel-polyfill`
+
+babel 预设可以编译几乎所有的 JavaScript 新语法，但是对于 API 却不能解决，解决这个问题 babel 用的是 babel-polyfill (它有 core-js 和 regenerator 两部分构成)。
+
+`babel-plugin-tranform-classes`// 解决 ES6 类（class）的兼容性
