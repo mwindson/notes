@@ -1,6 +1,31 @@
-## ES6
+<!-- TOC -->
 
-### let const
+- [ES6](#es6)
+  - [let const](#let-const)
+  - [函数](#函数)
+  - [箭头函数](#箭头函数)
+  - [扩展运算符(...)](#扩展运算符)
+  - [可枚举](#可枚举)
+  - [Symbol](#symbol)
+  - [Proxy 对象](#proxy-对象)
+  - [Promise 对象](#promise-对象)
+  - [迭代器 Iterator](#迭代器-iterator)
+  - [生成器 generator](#生成器-generator)
+    - [原理](#原理)
+    - [运行逻辑](#运行逻辑)
+    - [for...of...](#forof)
+    - [yield\*](#yield\)
+    - [return() 和 throw()](#return-和-throw)
+  - [async](#async)
+  - [class](#class)
+    - [继承](#继承)
+    - [私有方法](#私有方法)
+
+<!-- /TOC -->
+
+# ES6
+
+## let const
 
 `let`声明的变量必须在声明后使用，不存在变量提升。
 `let`声明的变量会绑定在作用域中，不受外界变量影响，在声明之前变量不可用。
@@ -10,7 +35,7 @@
 外层作用域无法读取内层作用域的变量。
 内层作用域可以定义外层作用域的同名变量 。
 
-### 函数
+## 函数
 
 默认参数，惰性求值
 指定了默认值以后，函数的`length`属性，将返回没有指定默认值的参数个数，如果设置了默认值的参数不是尾参数，那么`length`属性也不再计入后面的参数了。
@@ -18,13 +43,13 @@
 
 `rest`（...变量名），代替`arguments`
 
-### 箭头函数
+## 箭头函数
 
 非箭头函数有自己的`this`，箭头函数没有自己的`this`，而是从自己的作用域链的上一层继承`this`。
 
 由于箭头函数没有自己的`this`，通过`call`或`apply`方法调用一个函数时，只能传递参数，第一个参数会被忽略。
 
-### 扩展运算符(...)
+## 扩展运算符(...)
 
 将一个数组转为用逗号分隔的**参数序列**。
 
@@ -36,7 +61,7 @@ list=[1,2,3]
 [a, ...rest] = list // a=1 rest=[2,3]
 ```
 
-### 可枚举
+## 可枚举
 
 目前，有四个操作会忽略`enumerable`为`false`的属性。
 
@@ -45,7 +70,7 @@ list=[1,2,3]
 - `JSON.stringify()`：只串行化对象自身的可枚举的属性。
 - `Object.assign()`： 忽略`enumerable`为`false`的属性，只拷贝对象自身的可枚举的属性。
 
-### Symbol
+## Symbol
 
 ES6 新引入的原始数据类型，每一个 symbol 是独一无二，互不相等，从而保证变量互不冲突。
 `Symbol.for`接受一个字符串作为参数，然后搜索有没有以该参数作为名称的 Symbol 值。如果有，就返回这个 Symbol 值，否则就新建并返回一个以该字符串为名称的 Symbol 值。
@@ -55,7 +80,7 @@ Symbol.for('bar') === Symbol.for('bar') // true
 Symbol('bar') === Symbol('bar') // fasle
 ```
 
-### Proxy 对象
+## Proxy 对象
 
 用于代理,修改部分原有的操作。
 
@@ -117,7 +142,7 @@ person.name = '李四'
 // 输出 "李四, 20"
 ```
 
-### Promise 对象
+## Promise 对象
 
 Promise 对象有以下两个特点。
 
@@ -143,7 +168,7 @@ array.reduce(
 )
 ```
 
-### 迭代器 Iterator
+## 迭代器 Iterator
 
 Iterator 的遍历过程是这样的。
 （1）创建一个指针对象，指向当前数据结构的起始位置。也就是说，遍历器对象本质上，就是一个指针对象。
@@ -164,13 +189,13 @@ console.log([...iterable1])
 // expected output: Array [1, 2, 3]
 ```
 
-### 生成器 generator
+## 生成器 generator
 
-#### 原理
+### 原理
 
 每当生成器执行`yields`语句，生成器的堆栈结构（本地变量、参数、临时值、生成器内部当前的执行位置）被移出堆栈。然而，生成器对象保留了对这个堆栈结构的引用（备份），所以稍后调用.next()可以重新激活堆栈结构并且继续执行。
 
-#### 运行逻辑
+### 运行逻辑
 
 `generator`生成器在第一次调用时，不会立刻执行。
 遍历器对象的`next`方法的运行逻辑如下。
@@ -180,20 +205,20 @@ console.log([...iterable1])
 3.  如果没有再遇到新的`yield`表达式，就一直运行到函数结束，直到 return 语句为止，并将 `return`语句后面的表达式的值，作为返回的对象的`value`属性值。
     （4）如果该函数没有`return`语句，则返回的对象的`value`属性值为`undefined`。
 
-#### for...of...
+### for...of...
 
 一旦 next 方法的返回对象的 done 属性为 true，for...of 循环就会中止，且不包含该返回对象
 
-#### yield\*
+### yield\*
 
 `yield*`会遍历后面有 Iterator 接口的数据结构，如数组、字符串等。
 
-#### return() 和 throw()
+### return() 和 throw()
 
 `return()`会终止遍历，并且返回的 value 值是`return`方法的参数。以后再调用 next 方法，done 属性总是返回 true。
 `throw`方法可以接受一个参数，该参数会被 catch 语句接收，建议抛出 Error 对象的实例。
 
-### async
+## async
 
 `async`是`Generator`函数的语法糖。
 `async`函数的返回值是`Promise`对象。
@@ -215,11 +240,11 @@ async function logInOrder(urls) {
 }
 ```
 
-### class
+## class
 
 默认采用严格模式。类的`this`默认指向类的实例。
 
-#### 继承
+### 继承
 
 子类的构造函数中，只有调用 super 之后，才可以使用 this 关键字，否则会报错。这是因为子类实例的构建，基于父类实例，只有 super 方法才能调用父类实例。
 
@@ -261,7 +286,7 @@ Object.setPrototypeOf(Child, Parent)
 Child.__proto__ = Parent
 ```
 
-#### 私有方法
+### 私有方法
 
 没有提供，只能模拟实现
 
@@ -272,11 +297,11 @@ Child.__proto__ = Parent
     const bar = Symbol('bar')
     const snaf = Symbol('snaf')
     export default class myClass {
-      // 公有方法
+      /*公有方法 */
       foo(x) {
         this[bar](x)
       }
-      // 私有方法
+      /*私有方法*/
       [bar](x) {
         return (this[snaf] = x)
       }

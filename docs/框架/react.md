@@ -1,3 +1,31 @@
+<!-- TOC -->
+
+- [React](#react)
+  - [特点](#特点)
+  - [事件系统](#事件系统)
+  - [生命周期](#生命周期)
+  - [setState 更新](#setstate-更新)
+  - [diff 算法](#diff-算法)
+  - [组件通信](#组件通信)
+  - [React 16.3 变化](#react-163-变化)
+    - [生命周期](#生命周期-1)
+      - [static getDerivedStateFromProps(nextProps,prevState)](#static-getderivedstatefrompropsnextpropsprevstate)
+      - [componentWillUpdate => getSnapshotBeforeUpdate(prevProps,prevState)](#componentwillupdate--getsnapshotbeforeupdateprevpropsprevstate)
+    - [新的 Refs](#新的-refs)
+    - [context API](#context-api)
+  - [受控组件与非受控组件](#受控组件与非受控组件)
+    - [受控组件](#受控组件)
+    - [非受控组件](#非受控组件)
+  - [性能优化](#性能优化)
+    - [PureComponent 和 shouldComponentUpdate](#purecomponent-和-shouldcomponentupdate)
+    - [Immutable](#immutable)
+    - [动态子组件设置 key](#动态子组件设置-key)
+  - [一些问题](#一些问题)
+    - [在 setState 更新完成后执行一个事件](#在-setstate-更新完成后执行一个事件)
+    - [React 安全](#react-安全)
+
+<!-- /TOC -->
+
 # React
 
 ## 特点

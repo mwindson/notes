@@ -1,3 +1,14 @@
+<!-- TOC -->
+
+- [Vue](#vue)
+  - [Vue 响应式原理](#vue-响应式原理)
+    - [追踪变化](#追踪变化)
+    - [Observer、Watcher、Dep](#observerwatcherdep)
+  - [React 与 Vue](#react-与-vue)
+    - [优化](#优化)
+
+<!-- /TOC -->
+
 # Vue
 
 ## Vue 响应式原理
