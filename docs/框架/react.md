@@ -94,7 +94,9 @@
 ## 组件通信
 
 1.  父子组件通信
+
     父组件通过 props 向子组件传递数据；子组件通过调用父组件传递的函数向父组件传递数据。
+
 2.  跨组件通信
     - 通过`EventEmitter`事件来实现，在`componentDidMount`添加监听，在`componentWillUnmount`移除监听。
     - 层层传递 props 和回调函数
@@ -184,7 +186,10 @@ const { Provider, Consumer } = React.createContext(defaultValue)
 
 为了避免深比较的性能问题和浅比较的局限性，使用 Immutable 可以优化性能。
 `Immutable`可以通过`is`快捷准确进行比较。
+
 另外，为了避免原地修改产生的问题，需要`Immutable`不可变的对象。
+
+`Immutable`内部使用了 trie 数据结构来存储，只要两个对象的 hashCode 相等，值就是一样，可以避免深度遍历进行比较，优化性能。
 
 ### 动态子组件设置 key
 

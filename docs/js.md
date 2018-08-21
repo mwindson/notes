@@ -130,8 +130,10 @@ bar.foo() //200
 
 ## 对象
 
-**原型**：`xxx.__proto__`指向对象的原型
+**原型**：`xxx.__proto__`指向对象的原型,或者用`Object.getPrototypeOf(xxx)`得到原型
+
 **原型链**：查询属性 x：对象 o ->对象 o 的原型 -> 对象 o 原型的原型 -> .. 直到找到 x 或找到 Object.prototype(`Object.prototype.__proto__ 为null`)为止
+
 **构造函数**：`xxx.prototype`指向实例的原型（即类），原型通过构造函数创建实例
 
 **原型继承**
@@ -158,7 +160,7 @@ bar.foo() //200
 
 `for...in...`可以遍历可枚举属性（自有属性和继承的属性），内置方法不可枚举。
 
-es5 中新增`Object.keys()`（只有可枚举的属性）和`Object.getOwnPropertyNames()`（包括不可枚举的属性）方法
+es5 中新增`Object.keys()`（只有可枚举的属性）和`Object.getOwnPropertyNames()`（包括不可枚举的属性）方法。
 
 ## 函数
 
@@ -280,6 +282,7 @@ Javascript 引擎基础 GC 方案是标记清除，遍历所有可访问的对�
 变量设置为 null，则会在下次进行垃圾回收
 
 缺点：**GC 时，停止响应其他操作**
+
 优化：
 
 - 分代回收：多回收临时对象，少回收持久对象。
@@ -288,6 +291,7 @@ Javascript 引擎基础 GC 方案是标记清除，遍历所有可访问的对�
 ### 内存泄漏
 
 1.  部分闭包造成的循环引用。
+2.  在 IE 中，如果闭包的作用域链中存在 HTML 元素，那么就无法被销毁导致内存泄露。
 
 ## Event Loop
 
@@ -304,7 +308,7 @@ Javascript 引擎基础 GC 方案是标记清除，遍历所有可访问的对�
 
 在一个 macrotask（如主代码）结束后，会优先执行 microtask，再执行下一个 macrotask。
 
-- macrotask：**主代码块**，定时器， I/O，UI 渲染等（可以看到，事件队列中的每一个事件都是一个 macrotask）
+- macrotask：**主代码块**，定时器， I/O，UI 渲染等（事件队列中的每一个事件都是一个 macrotask）
 - microtask：Promise，process.nextTick，mutation observer 等
 
 ![macrotask和microtask](imgs/js_macrotask_microtask.png)
@@ -332,9 +336,15 @@ Javascript 引擎基础 GC 方案是标记清除，遍历所有可访问的对�
 
 ## 其他
 
-`for...in...`转换为可枚举的对象后，根据对象的属性（字符串）来进行遍历
+`for...in...`
+
+转换为可枚举的对象后，根据对象的属性（字符串）来进行遍历。
+
+作用于数组的 for-in 循环除了遍历数组元素以外,还会遍历自定义属性。
 
 `for...of...`
+
+在可迭代对象（包括 Array，Map，Set，String，TypedArray，arguments 对象等等）上创建一个迭代循环。
 
 ## 严格模式
 

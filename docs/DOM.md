@@ -117,7 +117,7 @@ getElementById、getElementsByClassName、getElementsByTagName、 getElementsByN
 
 - 如果想用 JS 修改元素的样式，最好通过改变元素的 class 名，并尽可能在 DOM 树最末端的节点上修改（例如可以想办法只修改元素子节点上的 class）
 
-- 不要多次修改 DOM，可以使用 document.createDocumentFragment() 把要改的 DOM 节点缓存起来 在内部修改，再一次性添加进 HTML 中
+- 不要多次修改 DOM，可以使用`document.createDocumentFragment()`把要改的 DOM 节点缓存起来 在内部修改，再一次性添加进 HTML 中
 
 - 将要修改的 DOM 节点设置 display:none，会有一次 repaint，接着可以多次修改，修改完后再设置为 display:block
 
@@ -130,4 +130,4 @@ getElementById、getElementsByClassName、getElementsByTagName、 getElementsByN
 
 `script`节点同样只有在插入 document 时，才会被 parse 和执行。
 
-现代浏览器会对上述情况进行优化，避免不必要的计算。
+现代浏览器会对频繁插入节点的情况进行优化，延后相关不必要的计算，避免性能问题，但依然建议用`document.createDocumentFragment`。
