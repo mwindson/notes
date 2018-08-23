@@ -95,22 +95,40 @@ parentNode.removeChild(childNode)
 
 ## 查找节点
 
-getElementById、getElementsByClassName、getElementsByTagName、 getElementsByName、querySelector、querySelectorAll
+`getElementById`：根据 id 属性查找元素
+
+`getElementsByClassName`：根据 class 属性查找元素
+
+`getElementsByTagName`：根据元素标签查找元素
+
+`getElementsByName`：根据 name 属性查找元素
+
+`querySelector`：查找第一个符合条件的元素
+
+`querySelectorAll`：查找所有符合条件的元素
 
 ## 遍历节点
 
 `parentNode`：遍历到当前结点的父节点
+
 `firstChild`：第一个子节点
+
 `lastChild`：最后一个子节点
+
 `nextSibling`：后一个兄弟节点
+
 `previousSibling`：前一个兄弟节点
 
 ## 对元素属性进行操作
 
 `getAttribute`：获取对应属性名的属性值
+
 `setAttribute`：设置对应属性名的属性值
+
 `removeAttribute`：删除对应属性名的属性值
+
 `getAttributeNames()`：获取节点的所有属性名
+
 `hasAttribute(attName)`：是否包含指定的属性
 
 ## 修改 DOM 的技巧
