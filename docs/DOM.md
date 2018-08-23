@@ -44,7 +44,7 @@ textNode.nodeType // 3
 ### 创建文档段
 
 `createDocumentFragment()`
-创建一个，在其中组装一个 DOM 子树，然后使用 Node 诸如 `appendChild()`或`insertBefore()`之类的接口方法将该片段附加或插入到 DOM 中。
+创建一个 DOM 片段，在其中组装一个 DOM 子树，然后使用 Node 诸如 `appendChild()`或`insertBefore()`之类的接口方法将该片段附加或插入到 DOM 中。
 
 ## 合并文本节点
 
@@ -57,12 +57,15 @@ textNode.nodeType // 3
 ## 添加节点
 
 `appendChild`：在父节点的`childNodes`末尾添加子节点，如果节点已存在那么移动到末尾。
+
 `insertBefore`：在父节点`childNodes`的某一节点前插入节点
+
 `innerHTML`：通过`innerHTML`替换子树
 
 ```javascript
 parentNode.appendChild(nodeInsert)
-parentNode.insertBefore(nodeInsert, nodeExist) // 如果nodeExist为null，那么等同于appendChild()
+parentNode.insertBefore(nodeInsert, nodeExist) 
+// 如果nodeExist为null，那么等同于appendChild()
 ```
 
 ## 复制节点
@@ -72,7 +75,8 @@ parentNode.insertBefore(nodeInsert, nodeExist) // 如果nodeExist为null，那�
 ```javascript
 nodeA.clone(ture)
 /**
- * 参数为布尔值，参数设为true则进行深复制，会复制nodeA节点及其整个子树；参数为false进行浅复制，只复制nodeA节点；
+ * 参数为布尔值，参数设为true则进行深复制，会复制nodeA节点及其整个子树；
+ * 参数为false进行浅复制，只复制nodeA节点；
  * ps:cloneNode()并不复制js属性，但IE会复制相关事件处理程序
  */
 ```

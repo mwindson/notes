@@ -59,16 +59,27 @@
 ## 生命周期
 
 - 首次挂载：
+
   `getDefaultProps`->`getInitialState`->`componentWillMount`->`render`->`componentDidMount`
+
 - 卸载组件：
+
   `componentWillUnmount`
+
 - 重新挂载：
+
   `getInitialState`->`componentWillMount`->`render`->`componentDidMount`
+
 - 再次渲染，组件更新：
+
   `componentWillReceiveProps`->`shouldComponentUpdate`->`componentWillUpdate`->`render`->`componentDidUpate`
+
 - state 改变：
+
   `shouldComponentUpdate`->`componentWillUpdate`->`render`->`componentDidUpdate`
+
 - setState 的时机
+
   `componentWillMount`、`componentDidMount`、`componentWillReceiveProps`、`componentDidUpdate`
 
 ## setState 更新
@@ -180,6 +191,7 @@ const { Provider, Consumer } = React.createContext(defaultValue)
 ### PureComponent 和 shouldComponentUpdate
 
 `shouldComponentUpdate`会将当前传入的 props 和 state 与之前的进行**浅比较**。
+
 `PureComponent`实现`ShouldComponent`的默认方法不同。`PureComponent`默认情况下会对前后的 props 和 state 进行浅比较，`Component`会默认返回 true。
 
 ### Immutable

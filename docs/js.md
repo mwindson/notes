@@ -31,7 +31,7 @@
     - [es6 module](#es6-module)
   - [例题](#例题)
     - [resize 和 scroll 事件的性能优化](#resize-和-scroll-事件的性能优化)
-    - [浅拷贝：引用复制和 Object.assign](#浅拷贝引用复制和-objectassign)
+    - [浅拷贝和深拷贝](#浅拷贝和深拷贝)
     - [Object.create()的 polyfill](#objectcreate的-polyfill)
     - [null 与 undefined 区别](#null-与-undefined-区别)
 
@@ -378,33 +378,38 @@ javascript 脚本的加载默认是同步和阻塞的。`defer`属性会延迟�
 ### js 模块加载原理
 
 **原理一：_id 即路径_ 原则。**
-通常我们的入口是这样的： require( [ 'a', 'b' ], callback ) 。这里的 'a'、'b' 都是 ModuleId。通过 id 和路径的对应原则，加载器才能知道需要加载的 js 的路径。在这个例子里，就是 baseUrl + 'a.js' 和 baseUrl + 'b.js'。
+
+通常入口是这样的： require( [ 'a', 'b' ], callback ) 。这里的 'a'、'b' 都是 ModuleId。通过 id 和路径的对应原则，加载器才能知道需要加载的 js 的路径。在这个例子里，就是 baseUrl + 'a.js' 和 baseUrl + 'b.js'。
 
 但 id 和 path 的对应关系并不是永远那么简单，比如在 AMD 规范里就可以通过配置 Paths 来给特定的 id 指配 path。
 
 **原理二：createElement('script') & appendChild**
-知道路径之后，就需要去请求。一般是通过 **createElement('script') & appendChild** 去请求。这个大家都知道，不多说。有时候有的加载器也会通过 AJAX 去请求脚本内容。
 
-一般来说，需要给 <script> 设置一个属性用来标识模块 id, 作用后面会提到。
+一般是通过 **createElement('script') & appendChild** 去请求路径对应的 js 模块。
+
+一般来说，需要给 `<script>` 设置一个属性用来标识模块 id, 作用后面会提到。
 
 **原理三：document.currentScript**
-a.js 里可能是 define( id, factory ) 或者是 define( factory )，后者被称为匿名模块。那么当 define(factory) 被执行的时候，我们怎么知道当前被定义的是哪个模块呢，具体地说，这个匿名模块的实际模块 id 是什么？ 答案是通过 **document.currentScript** 获取当前执行的<script>，然后通过上面给 script 设置的属性来得到模块 id。
+
+a.js 里可能是 define(id,factory) 或者是 define(factory)，后者被称为匿名模块。那么当 define(factory) 被执行的时候，我们怎么知道当前被定义的是哪个模块呢？ 答案是通过 **document.currentScript** 获取当前执行的`<script>`，然后通过上面给 script 设置的属性来得到模块 id。
 
 需要注意的是，低级浏览器是不支持 currentScript 的，这里需要进行浏览器兼容。**在高级浏览器里面，还可以通过 script.onload 来处理这个事情。**
 
 **原理四：依赖分析**
-在继续讲之前，需要先简单介绍下模块的生命周期。模块在被 Define 之后并不是马上可以用了，在你执行它的 factory 方法来生产出最终的 export 之前，你需要保证它的依赖是可用的。那么首先就要先把依赖分析出来。
 
-简单来说，就是通过 toString 这个方法得到 factory 的内容，然后用正则去匹配其中的 require( 'moduleId' )。当然也可以不用正则。
+模块在被 Define 之后并不是马上可以用了，在你执行它的 factory 方法来生产出最终的 export 之前，你需要保证它的依赖是可用的。那么首先就要先把依赖分析出来。
 
-这就是为什么 require( var ); 这种带变量的语句是不被推荐的，因为它会影响依赖分析。如果一定要用变量，可以用 require( [ var ] ) 这种异步加载的方式。
+简单来说，就是通过 toString 这个方法得到 factory 的内容，然后用正则去匹配其中的 require( 'moduleId')。当然也可以不用正则。
+
+这就是为什么`require(var)`这种带变量的语句是不被推荐的，因为它会影响依赖分析。如果一定要用变量，可以用`require([var])`这种异步加载的方式。
 
 **原理五：递归加载**
-在分析出模块的依赖之后，我们需要递归去加载依赖模块
+
+在分析出模块的依赖之后，我们需要递归去加载依赖模块。
 
 ### commonjs
 
-服务器端模块的规范。`require`是同步的，但浏览器天生异步，无法正常加载模块。因为同步的加载模块会对性能，可用性，debug 调试，跨域访问产生问题。
+服务器端模块的规范。`require`是同步的，但浏览器天生异步，无法正常加载模块。因为同步的加载模块会产生性能、可用性、debug 调试、跨域访问等问题。
 
 ```javascript
 let { stat, exists, readFile } = require('fs')
@@ -418,13 +423,13 @@ AMD 是`Asynchronous Module Definition`的缩写，例如`requirejs`。
 
 流程：
 
-1.  我们在使用 requireJS 时，都会把所有的 js 交给 requireJS 来管理，也就是我们的页面上只引入一个 require.js，把 data-main 指向我们的 main.js。
+1.  我们在使用 requireJS 时，都会把所有的 js 交给 requireJS 来管理，把 data-main 指向我们的 main.js。
 
-2.  通过我们在 main.js 里面定义的 require 方法或者 define 方法，requireJS 会把这些依赖和回调方法都用数据结构保存起来。
+2.  通过我们在 main.js 里面定义的 require 方法或者 define 方法，requireJS 会把这些依赖和回调方法都用**数据结构**保存起来。
 
 3.  当页面加载时，requireJS 会根据这些依赖预先把需要的 js 通过 document.createElement 的方法引入到 dom 中，这样，被引入 dom 中的 script 便会运行。
 
-4.  由于我们依赖的 js 也是要按照 requireJS 的规范来写的，所以他们也会有 define 或者 require 方法，同样类似第二步这样循环向上查找依赖，同样会把他们村起来。
+4.  由于我们依赖的 js 也是要按照 requireJS 的规范来写的，所以他们也会有 define 或者 require 方法，同样类似第二步这样循环向上查找依赖，同样会把他们存起来。
 
 5.  当我们的 js 里需要用到依赖所返回的结果时(通常是一个 key value 类型的 object),requireJS 便会把之前那个保存回调方法的数据结构里面的方法拿出来并且运行，然后把结果给需要依赖的方法。
 
@@ -447,6 +452,7 @@ define(function(require, exports, module) {
 ```
 
 `AMD`是依赖关系前置,在定义模块的时候就要声明其依赖的模块;
+
 `CMD`是按需加载依赖就近,只有在用到某个模块的时候再去 require;
 
 ### es6 module
@@ -493,7 +499,9 @@ var throttle = function(delay, action) {
 }
 ```
 
-### 浅拷贝：引用复制和 Object.assign
+### 浅拷贝和深拷贝
+
+浅拷贝：引用复制和 Object.assign
 
 深拷贝：
 
