@@ -8,11 +8,13 @@
   - [存储](#存储)
     - [localStorage 和 sessionStorage](#localstorage-和-sessionstorage)
     - [cookie](#cookie)
+      - [cookie 安全性字段。](#cookie-安全性字段)
     - [cookie vs session](#cookie-vs-session)
     - [HTML5 离线缓存](#html5-离线缓存)
   - [多媒体](#多媒体)
     - [图片](#图片)
     - [音频和视频](#音频和视频)
+  - [Load 和 DOMContentLoaded 区别](#load-和-domcontentloaded-区别)
   - [回流和重绘](#回流和重绘)
   - [iframe](#iframe)
     - [优点](#优点)
@@ -112,6 +114,15 @@ HTTP 协议的一种拓展；在 Web 浏览器和 Web 服务器之间传输。�
 
 **secure**：设置为 true 时，只能通过 HTTPS 等安全协议来传输。
 
+#### cookie 安全性字段。
+
+|   属性    |                              作用                              |
+| :-------: | :------------------------------------------------------------: |
+|   value   | 如果用于保存用户登录态，应该将该值加密，不能使用明文的用户标识 |
+| http-only |             不能通过 JS 访问 Cookie，减少 XSS 攻击             |
+|  secure   |                只能在协议为 HTTPS 的请求中携带                 |
+| same-site |     规定浏览器不能在跨域请求中携带 Cookie，减少 CSRF 攻击      |
+
 ```javascript
 document.cookie = 'version=aaa;path=path;domain=domain;secure;max-age=64000'
 ```
@@ -190,6 +201,12 @@ window.applicationCache.swapCache() // 弃用老的缓存，但不会重新载�
 </audio>
 ```
 
+## Load 和 DOMContentLoaded 区别
+
+`Load`事件触发代表页面中的 DOM，CSS，JS，图片已经全部加载完毕。
+
+`DOMContentLoaded`事件触发代表初始的 HTML 被完全加载和解析，不需要等待 CSS，JS，图片加载。
+
 ## 回流和重绘
 
 Layout，也称为 Reflow，即回流。一般意味着元素的内容、结构、位置或尺寸发生了变化，需要重新计算样式和渲染树。
@@ -253,3 +270,41 @@ Repaint，即重绘，意味着元素发生的改变只是影响了元素的一�
 - 服务工作线程是一种可编程网络代理，让您能够控制页面所发送网络请求的处理方式。
 - 它在不用时会被中止，并在下次有需要时重启，因此，您不能依赖于服务工作线程的 onfetch 和 onmessage 处理程序中的全局状态。如果存在您需要持续保存并在重启后加以重用的信息，服务工作线程可以访问 IndexedDB API。
 - 服务工作线程广泛地利用了 promise
+
+目前，`service worker`用来制作缓存文件，提高首屏速度。
+
+```javascript
+// index.js
+if (navigator.serviceWorker) {
+  navigator.serviceWorker
+    .register('sw.js')
+    .then(function(registration) {
+      console.log('service worker 注册成功')
+    })
+    .catch(function(err) {
+      console.log('servcie worker 注册失败')
+    })
+}
+// sw.js
+// 监听 `install` 事件，回调中缓存所需文件
+self.addEventListener('install', e => {
+  e.waitUntil(
+    caches.open('my-cache').then(function(cache) {
+      return cache.addAll(['./index.html', './index.js'])
+    })
+  )
+})
+
+// 拦截所有请求事件
+// 如果缓存中已经有请求的数据就直接用缓存，否则去请求数据
+self.addEventListener('fetch', e => {
+  e.respondWith(
+    caches.match(e.request).then(function(response) {
+      if (response) {
+        return response
+      }
+      console.log('fetch source')
+    })
+  )
+})
+```

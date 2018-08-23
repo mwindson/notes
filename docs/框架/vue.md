@@ -1,15 +1,42 @@
 <!-- TOC -->
 
 - [Vue](#vue)
+  - [Vue 生命周期](#vue-生命周期)
+    - [生命周期](#生命周期)
+    - [适用场景](#适用场景)
   - [Vue 响应式原理](#vue-响应式原理)
     - [追踪变化](#追踪变化)
     - [Observer、Watcher、Dep](#observerwatcherdep)
+  - [Vue 更新](#vue-更新)
   - [React 与 Vue](#react-与-vue)
     - [优化](#优化)
 
 <!-- /TOC -->
 
 # Vue
+
+## Vue 生命周期
+
+### 生命周期
+
+1. `beforeCreate`组件实例刚刚被创建，组件属性计算之前，如 data 属性
+2. `created` 组件实例创建完成，属性已经绑定，DOM 还未生成，`$el`属性不存在
+3. `beforeMount` 组件挂载前，`$el`为 data 未渲染时的 html 模版代码
+4. `mounted` 组件挂载后，data 已经渲染到`$el`内
+5. `beforeUpdate` 组件更新前
+6. `updated` 组件更新后
+7. `activated` `keep-alive`组件被激活时调用
+8. `deactivated` `keep-alive`组件被移除时调用
+9. `beforeDestory` 组件销毁前调用
+10. `destoryed` 组件销毁后调用
+
+### 适用场景
+
+`beforecreate` : 举个栗子：可以在这加个 loading 事件
+`created`：在这结束 loading，还做一些初始化，实现函数自执行
+`mounted`： 在这发起后端请求，拿回数据，配合路由钩子做一些事情
+`beforeDestroy`： 你确认删除 XX 吗？
+`destroyed`：当前组件已被删除，清空相关内容
 
 ## Vue 响应式原理
 
@@ -40,6 +67,16 @@ Vue 中的数据对象都会在初始化过程中转化为 Observer 对象。
 **Dep**
 
 Dep 类是 Watcher 和 Observer 之间的纽带。每一个 Observer 都有一个 Dep 实例，用来存储订阅者 Watcher。
+
+## Vue 更新
+
+Vue 默认使用异步执行 DOM 更新。
+
+vue.js 提供了一个 nextTick 函数，其实也就是上面调用的 nextTick。
+
+nextTick 的实现比较简单，执行的目的是在 microtask 或者 task 中推入一个 funtion，在当前栈执行完毕（也行还会有一些排在前面的需要执行的任务）以后执行 nextTick 传入的 funtion。
+
+优先使用 Promise，在 Promise 不存在的情况下使用 MutationObserver，这两个方法都会在 microtask 中执行，会比 setTimeout 更早执行，所以优先使用。如果上述两种方法都不支持的环境则会使用 setTimeout，在 task 尾部推入这个函数，等待调用执行。
 
 ## React 与 Vue
 
