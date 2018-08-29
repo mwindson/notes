@@ -7,23 +7,27 @@ class PromiseDemo {
     this.onRejectedCallBack = [] //reject的回调函数列表
     const resolve = value => {
       // pending => resolved
-      if (this.status === 'pending') {
-        this.status = 'resolved'
-        this.data = value
-        for (let i = 0; i < this.onResolvedCallBack.length; i += 1) {
-          this.onResolvedCallBack[i](value)
+      setTimeout(() => {
+        if (this.status === 'pending') {
+          this.status = 'resolved'
+          this.data = value
+          for (let i = 0; i < this.onResolvedCallBack.length; i += 1) {
+            this.onResolvedCallBack[i](value)
+          }
         }
-      }
+      }, 0)
     }
     const reject = reason => {
       // pending => rejected
-      if (this.status === 'pending') {
-        this.status = 'rejected'
-        this.data = reason
-        for (let i = 0; i < this.onRejectedCallBack.length; i += 1) {
-          this.onRejectedCallBack[i](reason)
+      setTimeout(() => {
+        if (this.status === 'pending') {
+          this.status = 'rejected'
+          this.data = reason
+          for (let i = 0; i < this.onRejectedCallBack.length; i += 1) {
+            this.onRejectedCallBack[i](reason)
+          }
         }
-      }
+      }, 0)
     }
     try {
       executor(resolve, reject) // 执行executor
@@ -46,7 +50,6 @@ class PromiseDemo {
         : function(r) {
             throw r
           }
-    console.log(this.status, this.data)
     if (this.status === 'resolved') {
       // 如果promise1(此处即为this/self)的状态已经确定并且是resolved，我们调用onResolved
       // 因为考虑到有可能throw，所以我们将其包在try/catch块里
@@ -112,6 +115,50 @@ class PromiseDemo {
   catch(onRejected) {
     return this.then(null, onRejected)
   }
+  race(promises) {
+    return new Promise((resolve, reject) => {
+      promises.forEach(promise => {
+        promise.then(
+          v => {
+            resolve(v)
+          },
+          err => {
+            reject(err)
+          }
+        )
+      })
+    })
+  }
+  resolve(value) {
+    return new Promise((resolve, reject) => {
+      resolve(value)
+    })
+  }
+  reject(reason) {
+    return new Promise((resolve, reject) => {
+      reject(reason)
+    })
+  }
+  all(promises) {
+    let completeCount = 0
+    let resolvedValues = new Array(promises.length)
+    return new Promise((resolve, reject) => {
+      promises.forEach(
+        (promise, index) => {
+          promise.then(value => {
+            completeCount++
+            resolvedValues[index] = value
+            if (completeCount === promises.length) {
+              resolve(resolvedValues)
+            }
+          })
+        },
+        err => {
+          reject(err)
+        }
+      )
+    })
+  }
 }
 
 let mypromise = new PromiseDemo(function(resolve, reject) {
@@ -124,14 +171,22 @@ let mypromise = new PromiseDemo(function(resolve, reject) {
 //   })
 // })
 // setTimeout(() => mypromise.then(() => console.log('first 3')), 5000)
-mypromise = new PromiseDemo(function(resolve, reject) {
-  if (Math.random() > 0.5) {
-    resolve('ok')
-  } else {
-    reject('error')
-  }
+// mypromise = new PromiseDemo(function(resolve, reject) {
+//   if (Math.random() > 0.5) {
+//     resolve('ok')
+//   } else {
+//     reject('error')
+//   }
+// })
+// const res = mypromise.then(res => ({ ok: true, res })).catch(err => ({ ok: false, err }))
+// res.then(v => {
+//   console.log(v)
+// })
+
+const p = new PromiseDemo(function(resolve, reject) {
+  console.log('a')
+  resolve()
+  console.log('b')
 })
-const res = mypromise.then(res => ({ ok: true, res })).catch(err => ({ ok: false, err }))
-res.then(v => {
-  console.log(v)
-})
+p.then(() => console.log('c'))
+console.log('d')
