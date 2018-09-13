@@ -73,11 +73,11 @@ parentNode.insertBefore(nodeInsert, nodeExist)
 `cloneNode(bool)`
 
 ```javascript
-nodeA.clone(ture)
+nodeA.cloneNode(ture)// 默认为false
 /**
- * 参数为布尔值，参数设为true则进行深复制，会复制nodeA节点及其整个子树；
- * 参数为false进行浅复制，只复制nodeA节点；
- * ps:cloneNode()并不复制js属性，但IE会复制相关事件处理程序
+ * 参数为布尔值，参数设为true则进行深复制，会复制节点及其整个子树；
+ * 参数为false进行浅复制，只复制节点，不克隆它的任何子节点，该节点所包含的所有文本也不会被克隆；
+ * cloneNode()会会拷贝所有的属性以及属性值，并不复制用JavaScript动态绑定的事件
  */
 ```
 

@@ -143,25 +143,42 @@ CSS 匹配不是从左到右进行查找，而是从右到左进行查找。如�
 ```html
 <div class="box1">
   <div class="left">左侧固定</div>
-  <div class="right">右侧适应</div>
+  <div class="right">右侧自适应</div>
 </div>
 ```
 
 1.  浮动
 
-```css
-.box1 .left {
-  float: left;
-  width: 100px;
-  height: 100px;
-  background-color: red;
-}
-.box1 .right {
-  margin-left: 100px;
-  height: 100px;
-  background-color: green;
-}
-```
+    左侧元素浮动，右侧添加`margin-left`。
+
+    ```css
+    .left {
+      float: left;
+      width: 100px;
+      height: 100px;
+      background-color: red;
+    }
+    .right {
+      margin-left: 105px;
+      background-color: green;
+    }
+    ```
+
+    左侧元素浮动，右侧添加`overflow:hidden`。
+
+    ```css
+    .left {
+      float: left;
+      width: 100px;
+      height: 100px;
+      background-color: red;
+      margin-right: 5px;<!-- 制造与右边的空隙 -->
+    }
+    .right {
+      background-color: green;
+      overflow: hidden;
+    }
+    ```
 
 2.  定位
 
