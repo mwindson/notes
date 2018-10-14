@@ -19,23 +19,56 @@
 
 ### 生命周期
 
-1. `beforeCreate`组件实例刚刚被创建，组件属性计算之前，如 data 属性
-2. `created` 组件实例创建完成，属性已经绑定，DOM 还未生成，`$el`属性不存在
-3. `beforeMount` 组件挂载前，`$el`为 data 未渲染时的 html 模版代码
-4. `mounted` 组件挂载后，data 已经渲染到`$el`内
-5. `beforeUpdate` 组件更新前
-6. `updated` 组件更新后
-7. `activated` `keep-alive`组件被激活时调用
-8. `deactivated` `keep-alive`组件被移除时调用
-9. `beforeDestory` 组件销毁前调用
-10. `destoryed` 组件销毁后调用
+1. `beforeCreate`
+
+   组件实例刚刚被创建，组件属性计算之前，如 data 属性
+
+2. `created`
+
+   组件实例创建完成，属性已经绑定，DOM 还未生成，`$el`属性不存在
+
+3. `beforeMount`
+
+   组件挂载前，`$el`为 data 未渲染时的 html 模版代码
+
+4. `mounted`
+
+   组件挂载后，data 已经渲染到`$el`内
+
+5. `beforeUpdate`
+
+   组件更新前
+
+6. `updated`
+
+   组件更新后
+
+7. `activated`
+
+   `keep-alive`组件被激活时调用
+
+8. `deactivated`
+
+   `keep-alive`组件被移除时调用
+
+9. `beforeDestory`
+
+   组件销毁前调用
+
+10. `destoryed`
+
+    组件销毁后调用
 
 ### 适用场景
 
 `beforecreate` : 举个栗子：可以在这加个 loading 事件
+
 `created`：在这结束 loading，还做一些初始化，实现函数自执行
+
 `mounted`： 在这发起后端请求，拿回数据，配合路由钩子做一些事情
+
 `beforeDestroy`： 你确认删除 XX 吗？
+
 `destroyed`：当前组件已被删除，清空相关内容
 
 ## Vue 响应式原理
@@ -43,7 +76,9 @@
 Vue 的响应式实现分为：
 
 1. 在生命周期的 initState 方法中将 data、prop 中的数据劫持，通过 observe 方法与 defineReactive 方法将相关对象转换为 Observer 对象；
+
 2. 在 initRender 方法中解析模板，通过 Watcher 对象，Dep 对象与观察者模式将模板中的指令与对应的数据建立依赖关系，在这个依赖收集的过程中，使用了全局对象 Dep.target ；
+
 3. 当数据发生改变时，触发`Object.defineProperty`方法中的`dep.notify`方法，遍历该数据的依赖列表，执行其`update`方法通知`Watcher`进行视图更新。。
 
 ### 追踪变化
@@ -72,9 +107,7 @@ Dep 类是 Watcher 和 Observer 之间的纽带。每一个 Observer 都有一�
 
 Vue 默认使用异步执行 DOM 更新。
 
-vue.js 提供了一个 nextTick 函数，其实也就是上面调用的 nextTick。
-
-nextTick 的实现比较简单，执行的目的是在 microtask 或者 task 中推入一个 funtion，在当前栈执行完毕（也行还会有一些排在前面的需要执行的任务）以后执行 nextTick 传入的 funtion。
+vue.js 提供了一个 nextTick 函数。nextTick 的实现比较简单，执行的目的是在 microtask 或者 task 中推入一个 funtion，在当前栈执行完毕以后执行 nextTick 传入的 funtion。
 
 优先使用 Promise，在 Promise 不存在的情况下使用 MutationObserver，这两个方法都会在 microtask 中执行，会比 setTimeout 更早执行，所以优先使用。如果上述两种方法都不支持的环境则会使用 setTimeout，在 task 尾部推入这个函数，等待调用执行。
 
@@ -98,8 +131,8 @@ React 和 Vue 有许多相似之处，它们都有：
 
 **学习难度**
 
-Vue 可以只用 vue 文件来编写，替换成 min 文件即可；React 推荐写法需要学习 es6 等，并且用 Babel 等转译
+Vue 可以只用 vue 文件来编写，替换成 min 文件即可；React 推荐写法需要学习 es6 等，并且用 Babel 等转译。
 
-Vue 的路由库和状态管理由官方维护
+Vue 的路由库和状态管理由官方维护。
 
-Vue 默认推荐模版；React 使用 Jsx
+Vue 默认推荐模版；React 使用 Jsx。

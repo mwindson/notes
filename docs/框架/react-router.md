@@ -65,6 +65,78 @@ router.route('/topics', function() {
 
 ![history路由](https://user-images.githubusercontent.com/8401872/29739490-c1dbb054-8a71-11e7-9c9f-31cbbd6adbcb.png)
 
+```html
+<body>
+  <div class="content"></div>
+  <a href='/' class='menu'>home</a>
+  <a href='/profile' class='menu'>profile</a>
+  <a href='/articles' class='menu'>articles</a>
+</body>
+```
+
+```javascript
+// 基于history的路由
+const $ = selector => document.querySelector(selector)
+class Route {
+  constructor(routeMap) {
+    this.routeMap = routeMap
+    this._bindPopState()
+  }
+  init(path) {
+    path = Route.correctPath(path)
+    history.replaceState({ path }, '', path)
+    this.routeMap[path] && this.routeMap[path]()
+  }
+  go(path) {
+    path = Route.correctPath(path)
+    history.pushState({ path }, '', path)
+    this.routeMap[path] && this.routeMap[path]()
+  }
+  _bindPopState() {
+    window.addEventListener('popstate', e => {
+      const path = e.state && e.state.path
+      this.routeMap[path] && this.routeMap[path]()
+    })
+  }
+  static correctPath(path) {
+    if (path !== '/' && path.slice(-1) === '/') {
+      path = path.match(/(.+)\/$/)[1]
+    }
+    return path
+  }
+}
+const routeMap = {
+  '/': () => {
+    const content = $('.content')
+    content.innerHTML = '<div>welcome to Home Page</div>'
+  },
+  '/profile': () => {
+    const content = $('.content')
+    content.innerHTML = '<div>welcome to Profile Page</div>'
+  },
+  '/articles': () => {
+    const content = $('.content')
+    content.innerHTML =
+      '<div>' +
+      '<p>welcome to Article Page</p>' +
+      '<ul>' +
+      '<li>文章1</li>' +
+      '<li>文章2</li>' +
+      '<li>文章3</li>' +
+      '</ul>' +
+      '</div>'
+  }
+}
+const router = new Route(routeMap)
+router.init(location.pathname)
+$('.menu').addEventListener('click', e => {
+  if (e.target.tagName === 'A') {
+    e.preventDefault()
+    router.go(e.target.getAttribute('href'))
+  }
+})
+```
+
 ## React-Router 原理
 
 React-Router 基于 history 库实现，实现了 URL 与渲染组件的同步。
@@ -83,7 +155,7 @@ state 存储在 sessionStorage 中
 
 ## 动态加载
 
-访问到路由才加载加了
+访问到路由才加载对应的组件
 
 - `getChildRoutes`
 - `getIndexRoute`

@@ -4,6 +4,7 @@
   - [引擎运行](#引擎运行)
   - [数据类型](#数据类型)
   - [**== 类型转换**](#-类型转换)
+  - [`Object.is` 和 `===`](#objectis-和-)
   - [变量](#变量)
   - [this](#this)
   - [对象](#对象)
@@ -70,6 +71,15 @@ a.len // undefined
 `ToNumber(A)` 尝试在比较前将参数 A 转换为数字，这与 +A（单目运算符+）的效果相同。`ToPrimitive(A)`通过尝试依次调用 A 的`A.toString()` 和 `A.valueOf()` 方法，将参数 A 转换为原始值（Primitive）
 
 `falsy value` : 0 , NaN,"", false, null , undefined
+
+## `Object.is` 和 `===`
+
+```javascript
+Object.is(NaN, NaN) // true
+NaN === NaN // false
+Object.is(+0, -0) + // false
+0 ===  -0 // true
+```
 
 ## 变量
 
@@ -152,7 +162,7 @@ bar.foo() //200
 
 ![img](https://github.com/mqyqingfeng/Blog/raw/master/Images/prototype5.png)
 
-`hasOwnProperty()`检测是否是自由属性。
+`hasOwnProperty()`检测是否是自有属性。
 
 `propertyIsEnumberable()`检测是否是自有属性且可枚举。
 
@@ -160,7 +170,7 @@ bar.foo() //200
 
 `for...in...`可以遍历可枚举属性（自有属性和继承的属性），内置方法不可枚举。
 
-es5 中新增`Object.keys()`（只有可枚举的属性）和`Object.getOwnPropertyNames()`（包括不可枚举的属性）方法。
+es5 中新增`Object.keys()`（只有自有且可枚举的属性）和`Object.getOwnPropertyNames()`（包括不可枚举的属性）方法。
 
 ## 函数
 
